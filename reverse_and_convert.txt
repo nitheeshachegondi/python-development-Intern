@@ -1,0 +1,19 @@
+def reverse_and_convert(n):
+    #vowels
+    vowels = 'aeiouAEIOU'
+
+    #Reverse the string
+    reversed_n = n[::-1]
+
+    #convert the reversed string
+    converted_n = ''.join(
+        char.upper if char in vowels else char.lower()
+        for char in reversed_n
+    )
+
+    return converted_n
+
+#Input and output
+input_n = "Hello, World!"
+output_n = reverse_and_convert(input_n)
+print(output_n) #"!dLrOw ,oLlEh"

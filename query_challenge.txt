@@ -1,0 +1,33 @@
+/* calculate the  total last quarter revenue */
+WITH LastQuarter AS (
+    SELECT 
+        EXTRACT(YEAR FROM CURRENT_DATE) AS current_year,
+        EXTRACT(QUARTER FROM CURRENT_DATE) AS current_quarter,
+        CASE 
+            WHEN EXTRACT(QUARTER FROM CURRENT_DATE) = 1 THEN EXTRACT(YEAR FROM CURRENT_DATE) - 1
+            ELSE EXTRACT(YEAR FROM CURRENT_DATE)
+        END AS year_of_last_quarter,
+        CASE 
+            WHEN EXTRACT(QUARTER FROM CURRENT_DATE) = 1 THEN 4
+            ELSE EXTRACT(QUARTER FROM CURRENT_DATE) - 1
+        END AS last_quarter
+)
+
+SELECT 
+    EXTRACT(YEAR FROM a.order_date) AS year,
+    EXTRACT(MONTH FROM a.order_date) AS month,
+    SUM(a.total_amount) AS total_revenue
+FROM 
+    orders a
+JOIN 
+    LastQuarter lq 
+ON 
+    (EXTRACT(YEAR FROM a.order_date) = lq.year_of_last_quarter AND 
+     EXTRACT(QUARTER FROM a.order_date) = lq.last_quarter)
+WHERE 
+    a.order_date >= DATE_TRUNC('quarter', CURRENT_DATE) - INTERVAL '1 quarter' 
+    AND a.order_date < DATE_TRUNC('quarter', CURRENT_DATE)
+GROUP BY 
+    year, month
+ORDER BY 
+    year, month;
