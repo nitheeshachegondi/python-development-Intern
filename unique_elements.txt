@@ -1,0 +1,23 @@
+def unique_elements(lst):
+    #make a list to store unique elements
+    uni_elements = []
+
+    #Iterate over each element in input list
+    for element in lst:
+        #check if the element is not present in the list of unique elements
+        is_unique = True
+        for uni_element in uni_elements:
+            if element == uni_element:
+                is_unique = False
+                break
+        
+        #If the element is unique, add to the uni_elements list
+        if is_unique:
+            uni_elements.append(element)
+
+    #Return the count of unique elements
+    return len(uni_elements)
+#Input and Output
+input_list = [1, 2, 2, 3, 4, 4, 5]
+unique_count = unique_elements(input_list)
+print(unique_count) #Output: 5
